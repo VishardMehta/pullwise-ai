@@ -6,16 +6,17 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background dark relative overflow-hidden">
       {/* Prism Background */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-60">
         <Prism
           animationType="3drotate"
-          glow={1.5}
-          scale={4}
-          hueShift={4.5}
-          colorFrequency={0.8}
-          bloom={1.2}
-          timeScale={0.3}
+          glow={2}
+          scale={3.5}
+          hueShift={3.8}
+          colorFrequency={1.2}
+          bloom={1.5}
+          timeScale={0.4}
           transparent={true}
+          noise={0.3}
         />
       </div>
 
