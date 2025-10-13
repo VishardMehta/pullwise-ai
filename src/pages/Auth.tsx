@@ -10,6 +10,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const envConfigured = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -23,12 +24,20 @@ const Auth = () => {
 
   const handleGitHubLogin = async () => {
     try {
+      if (!envConfigured) {
+        toast({
+          title: "Missing configuration",
+          description: "Supabase environment variables are not set. Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+          variant: "destructive",
+        });
+        return;
+      }
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
           redirectTo: `${window.location.origin}/profile`,
-          scopes: 'read:user user:email',
+          scopes: 'read:user user:email repo read:org',
         },
       });
 
@@ -86,7 +95,7 @@ const Auth = () => {
               <Button
                 size="lg"
                 onClick={handleGitHubLogin}
-                disabled={loading}
+                disabled={loading || !envConfigured}
                 className="w-full text-lg py-6 bg-white hover:bg-white/90 text-black"
               >
                 {loading ? (
@@ -97,10 +106,16 @@ const Auth = () => {
                 ) : (
                   <>
                     <Github className="mr-3 h-6 w-6" />
-                    Continue with GitHub
+                    {envConfigured ? 'Continue with GitHub' : 'Configure Supabase to continue'}
                   </>
                 )}
               </Button>
+
+              {!envConfigured && (
+                <p className="text-sm text-red-400">
+                  Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local and restart the dev server.
+                </p>
+              )}
 
               {/* Divider */}
               <div className="relative py-2">

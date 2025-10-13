@@ -19,7 +19,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     if (!containerRef.current) return;
 
     const SEPARATION = 150;
-    const AMOUNTX = 40;
+    const AMOUNTX = 50;
     const AMOUNTY = 60;
 
     // Scene setup
@@ -166,7 +166,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
   return (
     <div
       ref={containerRef}
-      className={cn('pointer-events-none fixed inset-0 -z-10', className)}
+      className={cn('pointer-events-none fixed inset-0 z-0', className)}
       {...props}
     />
   );

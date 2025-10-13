@@ -43,7 +43,48 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const syncUserProfile = async (user: User) => {
-    const githubData = user.user_metadata;
+    // Prefer enriched data from GitHub API using the provider token when available
+    let githubData: any = user.user_metadata || {};
+
+    try {
+      const sessionRes = await supabase.auth.getSession();
+      const providerToken = sessionRes.data.session?.provider_token as string | undefined;
+      if (providerToken) {
+        const res = await fetch('https://api.github.com/user', {
+          headers: {
+            Authorization: `Bearer ${providerToken}`,
+            Accept: 'application/vnd.github+json',
+          },
+        });
+        if (res.ok) {
+          const profile = await res.json();
+          githubData = {
+            ...githubData,
+            sub: profile.id?.toString?.(),
+            user_name: profile.login,
+            preferred_username: profile.login,
+            full_name: profile.name,
+            name: profile.name,
+            email: githubData.email, // email API may be separate; keep from metadata if present
+            avatar_url: profile.avatar_url,
+            bio: profile.bio,
+            company: profile.company,
+            location: profile.location,
+            blog: profile.blog,
+            twitter_username: profile.twitter_username,
+            public_repos: profile.public_repos,
+            public_gists: profile.public_gists,
+            followers: profile.followers,
+            following: profile.following,
+            created_at: profile.created_at,
+            updated_at: profile.updated_at,
+          };
+        }
+      }
+    } catch (e) {
+      // Non-fatal: fallback to Supabase metadata
+      console.warn('GitHub enrichment failed, using basic metadata');
+    }
 
     const profileData = {
       id: user.id,
