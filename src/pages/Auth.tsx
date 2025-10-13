@@ -1,19 +1,53 @@
 import { DottedSurface } from "@/components/DottedSurface";
 import { Button } from "@/components/ui/button";
-import { Github, GitBranch, ArrowLeft } from "lucide-react";
+import { Github, GitBranch, ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
-  const handleGitHubLogin = () => {
-    // GitHub OAuth login logic will go here
-    console.log("GitHub login clicked");
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/profile");
+      }
+    };
+    checkUser();
+  }, [navigate]);
+
+  const handleGitHubLogin = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/profile`,
+          scopes: 'read:user user:email',
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Authentication Error",
+        description: error.message || "Failed to sign in with GitHub",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
   };
 
   const handleGitLabLogin = () => {
-    // GitLab OAuth login logic will go here
-    console.log("GitLab login clicked");
+    toast({
+      title: "Coming Soon",
+      description: "GitLab authentication will be available soon",
+    });
   };
 
   return (
@@ -52,10 +86,20 @@ const Auth = () => {
               <Button
                 size="lg"
                 onClick={handleGitHubLogin}
+                disabled={loading}
                 className="w-full text-lg py-6 bg-white hover:bg-white/90 text-black"
               >
-                <Github className="mr-3 h-6 w-6" />
-                Continue with GitHub
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+                    Connecting...
+                  </>
+                ) : (
+                  <>
+                    <Github className="mr-3 h-6 w-6" />
+                    Continue with GitHub
+                  </>
+                )}
               </Button>
 
               {/* Divider */}
