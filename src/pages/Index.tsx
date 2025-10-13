@@ -5,23 +5,6 @@ import { Code2, GitPullRequest, Sparkles, Shield, Zap, Users } from "lucide-reac
 const Index = () => {
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Prism Background */}
-      <div className="absolute inset-0 opacity-50">
-        <Prism
-          animationType="3drotate"
-          height={2.5}
-          baseWidth={8}
-          glow={2.2}
-          scale={2.8}
-          hueShift={3.5}
-          colorFrequency={0.9}
-          bloom={1.8}
-          timeScale={0.3}
-          transparent={true}
-          noise={0.2}
-        />
-      </div>
-
       {/* Content */}
       <div className="relative z-10">
         {/* Hero Section */}
