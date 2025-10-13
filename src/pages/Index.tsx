@@ -1,10 +1,13 @@
-import Prism from "@/components/Prism";
+import { DottedSurface } from "@/components/DottedSurface";
 import { Button } from "@/components/ui/button";
 import { Code2, GitPullRequest, Sparkles, Shield, Zap, Users } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Dotted Surface Background */}
+      <DottedSurface />
+
       {/* Content */}
       <div className="relative z-10">
         {/* Hero Section */}
