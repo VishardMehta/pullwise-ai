@@ -1,8 +1,10 @@
 import { DottedSurface } from "@/components/DottedSurface";
 import { Button } from "@/components/ui/button";
 import { Code2, GitPullRequest, Sparkles, Shield, Zap, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Dotted Surface Background */}
@@ -27,7 +29,7 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button size="lg" className="text-lg px-8">
+              <Button size="lg" className="text-lg px-8" onClick={() => navigate("/auth")}>
                 Get Started
                 <GitPullRequest className="ml-2 h-5 w-5" />
               </Button>
