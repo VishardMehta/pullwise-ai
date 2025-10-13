@@ -1,73 +1,112 @@
-# Welcome to your Lovable project
+# PullWise
 
-## Project info
+AI-powered code review assistant that analyzes pull requests, detects issues, and suggests fixes. Built with React, Vite, TypeScript, Tailwind CSS, and shadcn-ui. Authentication is powered by Supabase with GitHub OAuth.
 
-**URL**: https://lovable.dev/projects/16da3c7a-fe3f-4b1c-b1a2-0b874e60ef69
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/16da3c7a-fe3f-4b1c-b1a2-0b874e60ef69) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Quick Start
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 1) Clone and install
+git clone <YOUR_REPO_URL>
+cd pullwise-ai
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2) Configure environment (see Environment below)
+cp .env.example .env.local  # then edit values
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3) Run the app
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open `http://localhost:5173` in your browser.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Scripts
 
-**Use GitHub Codespaces**
+- `npm run dev`: start Vite dev server
+- `npm run build`: production build
+- `npm run build:dev`: development-mode build (useful for debugging)
+- `npm run preview`: preview the built app locally
+- `npm run lint`: run ESLint
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Environment
 
-## What technologies are used for this project?
+Create `.env.local` in the project root and set:
 
-This project is built with:
+```bash
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+These are required for GitHub OAuth on the `Auth` page. Without them, the UI will prompt you to configure Supabase.
 
-## How can I deploy this project?
+## Supabase Setup
 
-Simply open [Lovable](https://lovable.dev/projects/16da3c7a-fe3f-4b1c-b1a2-0b874e60ef69) and click on Share -> Publish.
+1. Create a Supabase project and obtain the `Project URL` and `anon` key from Project Settings → API.
+2. In Supabase SQL Editor, run the migration found at `supabase/migrations/20251013093611_create_user_profiles.sql` to create the `user_profiles` table.
+3. In Authentication → Providers, enable GitHub and set the callback URL to:
+   - `http://localhost:5173/profile` (for local dev)
+4. In this repo, set `.env.local` as shown above and restart the dev server.
 
-## Can I connect a custom domain to my Lovable project?
+The Supabase client is initialized in `src/integrations/supabase/client.ts` and typed via `src/integrations/supabase/types.ts`.
 
-Yes, you can!
+## Features
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- AI-themed landing page with feature highlights (`src/pages/Index.tsx`)
+- GitHub OAuth login via Supabase (`src/pages/Auth.tsx`)
+- Profile dashboard pulling data from `user_profiles` (`src/pages/Profile.tsx`)
+- Global auth context and session handling (`src/contexts/AuthContext.tsx`)
+- Modern UI components via shadcn-ui and Tailwind
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Project Structure
+
+```
+src/
+  components/            # UI and visual components
+  contexts/              # React context providers (Auth, etc.)
+  hooks/                 # Reusable hooks
+  integrations/
+    supabase/            # Supabase client and types
+  pages/                 # Route pages (Index, Auth, Profile, NotFound)
+  config/                # App constants
+  lib/                   # Utilities
+```
+
+Key routes:
+- `/` → landing
+- `/auth` → GitHub sign-in
+- `/profile` → authenticated profile view
+
+## Development
+
+```sh
+npm run dev
+```
+
+- Hot reload is enabled by Vite.
+- Auth flow: `Auth` → GitHub OAuth via Supabase → redirect to `/profile`.
+
+## Build & Preview
+
+```sh
+npm run build
+npm run preview
+```
+
+The preview server hosts the production build locally for testing.
+
+## Tech Stack
+
+- React 18 + TypeScript
+- Vite 5
+- Tailwind CSS + shadcn-ui (Radix primitives)
+- Supabase (Auth + Postgres)
+- React Router, React Hook Form, Zod, TanStack Query
+
+## Troubleshooting
+
+- Missing Supabase config: The `Auth` page will show a message if `VITE_SUPABASE_URL` or `VITE_SUPABASE_ANON_KEY` is not set.
+- OAuth redirect mismatch: Ensure your GitHub provider settings in Supabase include `http://localhost:5173/profile` for development.
+- Database table missing: Run the migration SQL in Supabase if `user_profiles` queries fail.
+
+## Contributing
+
+Pull requests are welcome. Please run `npm run lint` before submitting changes.
