@@ -4,7 +4,7 @@ import { Code2, GitPullRequest, Sparkles, Shield, Zap, Users } from "lucide-reac
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background dark relative overflow-hidden">
+    <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Prism Background */}
       <div className="absolute inset-0 opacity-50">
         <Prism
