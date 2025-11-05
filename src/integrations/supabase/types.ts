@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          blog: string | null
+          company: string | null
+          created_at: string
+          email: string | null
+          followers: number | null
+          following: number | null
+          github_created_at: string | null
+          github_id: number | null
+          github_updated_at: string | null
+          github_username: string | null
+          id: string
+          location: string | null
+          name: string | null
+          public_gists: number | null
+          public_repos: number | null
+          raw_user_meta_data: Json | null
+          twitter_username: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          blog?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          followers?: number | null
+          following?: number | null
+          github_created_at?: string | null
+          github_id?: number | null
+          github_updated_at?: string | null
+          github_username?: string | null
+          id: string
+          location?: string | null
+          name?: string | null
+          public_gists?: number | null
+          public_repos?: number | null
+          raw_user_meta_data?: Json | null
+          twitter_username?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          blog?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          followers?: number | null
+          following?: number | null
+          github_created_at?: string | null
+          github_id?: number | null
+          github_updated_at?: string | null
+          github_username?: string | null
+          id?: string
+          location?: string | null
+          name?: string | null
+          public_gists?: number | null
+          public_repos?: number | null
+          raw_user_meta_data?: Json | null
+          twitter_username?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
