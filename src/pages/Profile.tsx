@@ -117,14 +117,23 @@ const Profile = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-white">GitHub Profile</h1>
-            <Button
-              onClick={signOut}
-              variant="outline"
-              className="border-white/20 text-white hover:bg-white/10"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => navigate('/dashboard')}
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10"
+              >
+                Dashboard
+              </Button>
+              <Button
+                onClick={signOut}
+                variant="outline"
+                className="border-white/20 text-white hover:bg-white/10"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
